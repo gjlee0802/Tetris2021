@@ -118,8 +118,10 @@ while True:
         rotate_index = (rotate_index+1)%4
         currBlk = Matrix(Blk_List[random_Block][rotate_index])
     elif key == ' ': # drop the block
-        print('Not implemented')
-        continue
+        while tempBlk.anyGreaterThan(1) == False:
+            top += 1       
+            tempBlk = iScreen.clip(top, left, top+currBlk.get_dy(), left+currBlk.get_dx())
+            tempBlk = tempBlk + currBlk
     else:
         print('Wrong key!!!')
         continue
@@ -138,7 +140,7 @@ while True:
             rotate_index = (rotate_index+3)%4
             currBlk = Matrix(Blk_List[random_Block][rotate_index])
         elif key == ' ': # undo: move up
-            print('Not implemented')
+            top -= 1
 
         tempBlk = iScreen.clip(top, left, top+currBlk.get_dy(), left+currBlk.get_dx())
         tempBlk = tempBlk + currBlk
