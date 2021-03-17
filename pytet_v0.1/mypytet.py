@@ -141,6 +141,7 @@ while True:
             currBlk = Matrix(Blk_List[random_Block][rotate_index])
         elif key == ' ': # undo: move up
             top -= 1
+            newBlockNeeded = True
 
         tempBlk = iScreen.clip(top, left, top+currBlk.get_dy(), left+currBlk.get_dx())
         tempBlk = tempBlk + currBlk
