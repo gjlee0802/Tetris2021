@@ -94,12 +94,19 @@ class CTetris(Tetris):
         
         for y in range(self.oScreen.get_dy()-Tetris.iScreenDw):
             if 0 not in array[y]:
+                # delete line
+                del_line = array[y]
                 array[y] = [0]*len(array[y])
-                #self.top = 0
+                del del_line
+
+                # move
                 self.top = 1
                 self.left = 0
-                self.currBlk = self.oScreen.clip(0, 0, self.oScreen.get_dy()-y, self.oScreen.get_dx())
-                self.tempBlk = self.iScreen.clip(self.top, self.left, self.currBlk.get_dy()-y, self.oScreen.get_dx())
-                self.tempBlk = self.tempBlk + self.currBlk
 
+                self.currBlk = self.oScreen.clip(0, 0, y, self.oScreen.get_dx())
+                self.tempBlk = self.iScreen.clip(0, 0, y, self.oScreen.get_dx())
+                self.tempBlk.paste(self.currBlk, 0, 0)
+                self.oScreen = Matrix(self.iScreen)
+                self.oScreen.paste(self.tempBlk, self.top, self.left)
+                
 ### end of class Tetris():
