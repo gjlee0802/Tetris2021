@@ -90,6 +90,16 @@ class CTetris(Tetris):
         return self.state
 
     def deleteFullLines(self):
-        return
+        array = self.oScreen.get_array()
+        
+        for y in range(self.oScreen.get_dy()-Tetris.iScreenDw):
+            if 0 not in array[y]:
+                array[y] = [0]*len(array[y])
+                #self.top = 0
+                self.top = 1
+                self.left = 0
+                self.currBlk = self.oScreen.clip(0, 0, self.oScreen.get_dy()-y, self.oScreen.get_dx())
+                self.tempBlk = self.iScreen.clip(self.top, self.left, self.currBlk.get_dy()-y, self.oScreen.get_dx())
+                self.tempBlk = self.tempBlk + self.currBlk
 
 ### end of class Tetris():
