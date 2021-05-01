@@ -14,7 +14,17 @@
 #include <arpa/inet.h>
 #include <signal.h>
 
+#include "CTetris.h"
+
 using namespace std;
+
+Matrix **(*setOfCBlockObjects) = nullptr;
+Matrix **(*setOfBlockObjects) = nullptr;
+
+int nBlockDegrees;
+int nBlockTypes;
+
+int iScreenDw;
 
 
 /**************************************************************/
@@ -125,7 +135,7 @@ int T6D0[] = { 0, 0, 0, 0, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, -1 };
 int T6D1[] = { 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, -1 };
 int T6D2[] = { 0, 0, 0, 0, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, -1 };
 int T6D3[] = { 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, -1 };
-  
+
 int *setOfCBlockArrays[] = {
   T0D0, T0D1, T0D2, T0D3,
   T1D0, T1D1, T1D2, T1D3,
@@ -133,39 +143,60 @@ int *setOfCBlockArrays[] = {
   T3D0, T3D1, T3D2, T3D3,
   T4D0, T4D1, T4D2, T4D3,
   T5D0, T5D1, T5D2, T5D3,
-  T6D0, T6D1, T6D2, T6D3,
+  T6D0, T6D1, T6D2, T6D3
 };
 
-#if 0
+#if 1
+
+struct TextColor{
+  std::string color_normal = "\033[37m";
+  std::string color_black = "\033[37m";
+  std::string color_green = "\033[32m";
+  std::string color_cyan = "\033[36m";
+  std::string color_blue = "\033[34m";
+  std::string color_yellow = "\033[33m";
+  std::string color_red = "\033[31m";
+  std::string color_magenta = "\033[95m";
+} color;
+
 void drawScreen(CTetris *board)
 {
-  int dy = board->oScreen->get_dy();
-  int dx = board->oScreen->get_dx();
-  int dw = board->iScreenDw;
-  int **array = board->oScreen->get_array();
+  int dy = board->oCScreen->get_dy();
+  int dx = board->oCScreen->get_dx();
+  int dw = iScreenDw;
+  int **array = board->oCScreen->get_array();
   system("clear");
 
+  std::cout << dy << " " << dx << " " << dw << " " << endl;
   for (int y = 0; y < dy - dw + 1; y++) {
     for (int x = dw - 1; x < dx - dw + 1; x++) {
-      if (array[y][x] == 0)
-	cout << color_black << "□ " << color_normal;
-      else if (array[y][x] == 1)
-	cout << color_black << "■ " << color_normal;
-      else if (array[y][x] == 2)
-	cout << color_green << "■ " << color_normal;
-      else if (array[y][x] == 3)
-	cout << color_cyan << "■ " << color_normal;
-      else if (array[y][x] == 4)
-	cout << color_blue << "■ " << color_normal;
-      else if (array[y][x] == 5)
-	cout << color_yellow << "■ " << color_normal;
-      else if (array[y][x] == 6)
-	cout << color_red << "■ " << color_normal;
-      else if (array[y][x] == 7)
-	cout << color_magenta << "■ " << color_normal;
-      else // array[y][x] == 1 // wall
-	cout << b_color_black << "■ " << color_normal;
+      if (array[y][x] == 0){
+        cout << "□ ";
+      }
+      else{
+        cout << "■ ";
+      }
     }
+  /*
+	cout << color.color_black << "□ " << color.color_normal;
+      else if (array[y][x] == 1)
+	cout << color.color_black << "■ " << color.color_normal;
+      else if (array[y][x] == 2)
+	cout << color.color_green << "■ " << color.color_normal;
+      else if (array[y][x] == 3)
+	cout << color.color_cyan << "■ " << color.color_normal;
+      else if (array[y][x] == 4)
+	cout << color.color_blue << "■ " << color.color_normal;
+      else if (array[y][x] == 5)
+	cout << color.color_yellow << "■ " << color.color_normal;
+      else if (array[y][x] == 6)
+	cout << color.color_red << "■ " << color.color_normal;
+      else if (array[y][x] == 7)
+	cout << color.color_magenta << "■ " << color.color_normal;
+      else // array[y][x] == 1 // wall
+	cout << color.color_black << "■ " << color.color_normal;
+    }
+  */
     cout << endl;
   }
 }
@@ -188,35 +219,36 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-#if 0
-  CTetris::init((int*)setOfCBlockArrays, MAX_BLK_TYPES, MAX_BLK_DEGREES);
+#if 1
+  init(setOfCBlockArrays, MAX_BLK_TYPES, MAX_BLK_DEGREES);
   CTetris *board = new CTetris(dy, dx);
   TetrisState state;
 
   srand((unsigned int)time(NULL));
-  key = (char)('0' + rand() % MAX_BLK_TYPES);
+  //key = (char)('0' + rand() % MAX_BLK_TYPES);
+  key = '0';
 #endif
 
   registerAlarm();
   while (key != 'q') {
-#if 0
+#if 1
     state = board->accept(key);
     if (state == NewBlock) {
       key = (char)('0' + rand() % MAX_BLK_TYPES);
       state = board->accept(key);
       if (state == Finished) {
-	drawScreen(board);
-	cout << endl;
-	break;
+	      drawScreen(board);
+	      cout << endl;
+	      break;
       }
     }
-    drawScreen(board);
+    //drawScreen(board);
     cout << endl;
 #endif
     key = getch();
     cout << key << endl;
   }
-#if 0
+#if 1
   delete board;
 #endif
 

@@ -3,10 +3,15 @@
 
 class CTetris : public Tetris {
 private:
-    Matrix **setOfCBlockObjects = nullptr;
-
+    Matrix *currCBlk;
 public:
-    void init(int * setOfCBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES);
+    Matrix *iCScreen;
+    Matrix *oCScreen;
+
+    void deleteFullLines();
     
-    CTetris();
+    TetrisState accept(char key);
+    CTetris(int cy, int cx);
 };
+
+void init(int **setOfCBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES);
