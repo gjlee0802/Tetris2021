@@ -54,9 +54,12 @@ class CTetris(Tetris):
             self.idxBlockDegree = (self.idxBlockDegree + 1) % Tetris.nBlockDegrees
             self.currBlk = Tetris.setOfBlockObjects[self.idxBlockType][self.idxBlockDegree]
         elif key == ' ': # drop the block
-            while not self.tempBlk.anyGreaterThan(1):
+            self.tempBlk = self.iScreen.clip(self.top, self.left, self.top+self.currBlk.get_dy(), self.left+self.currBlk.get_dx())
+            binaryBlk = self.tempBlk.binary() + self.currBlk.binary()
+            while not binaryBlk.anyGreaterThan(1):
                 self.top += 1
                 self.tempBlk = self.iScreen.clip(self.top, self.left, self.top+self.currBlk.get_dy(), self.left+self.currBlk.get_dx())
+                binaryBlk = self.tempBlk.binary() + self.currBlk.binary()
                 self.tempBlk = self.tempBlk + self.currBlk
         else:
             print('Wrong key!!!')
@@ -82,6 +85,7 @@ class CTetris(Tetris):
                 self.state = TetrisState.NewBlock
             
             self.tempBlk = self.iScreen.clip(self.top, self.left, self.top+self.currBlk.get_dy(), self.left+self.currBlk.get_dx())
+            binaryBlk = self.tempBlk.binary() + self.currBlk.binary()
             self.tempBlk = self.tempBlk + self.currBlk
 
         self.oScreen = Matrix(self.iScreen)
