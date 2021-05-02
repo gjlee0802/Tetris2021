@@ -53,6 +53,32 @@ void tetinit(int **setOfBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES){
 
 void Tetris::deleteFullLines()
 {
+    bool is_zero = false;
+    int ** array = oScreen->get_array();
+
+    int dx = oScreen->get_dx();
+
+    for (int y=0; y < oScreen->get_dy() - iScreenDw; y++){
+        is_zero = false;
+        for (int x=0; x < dx; x++){
+            if (array[y][x] == 0){
+                is_zero = true;
+            }
+        }
+
+        if (!is_zero){ // if 0 not in array[y]
+            for (int x=0; x < dx; x++){
+                array[y][x] = 0;
+            }
+            top = 1;
+            left = 0;
+            currBlk = oScreen->clip(0, 0, y, oScreen->get_dx());
+            tempBlk = iScreen->clip(0, 0, y, oScreen->get_dx());
+            tempBlk->paste(currBlk, 0, 0);
+            oScreen = new Matrix(iScreen);
+            oScreen->paste(tempBlk, top, left);
+        }
+    }
     return;
 }
 
@@ -81,7 +107,7 @@ TetrisState Tetris::tetaccept(char key)
         justStarted = false;
 
         std::cout << std::endl;
-        //if (tempBlk->anyGreaterThan(1)){
+        
         if (binaryBlk->anyGreaterThan(1)){
             state = Finished;
         }
@@ -122,6 +148,8 @@ TetrisState Tetris::tetaccept(char key)
     tempBlk = iScreen->clip(top, left, top+currBlk->get_dy(), left+currBlk->get_dx());
     binaryBlk = tempBlk->binary()->add(currBlk->binary());
     tempBlk = tempBlk->add(currBlk);
+
+    justStarted = false;
 
     //if (tempBlk->anyGreaterThan(1)){
     if (binaryBlk->anyGreaterThan(1)){
