@@ -110,7 +110,15 @@ CTetris::CTetris(int cy, int cx) : Tetris(cy, cx){
             k++;
         }
     }
+    delete arrayScreen2D;
 
     this->iCScreen = new Matrix(arrayScreen, arrayScreenDy, arrayScreenDx);
     this->oCScreen = new Matrix(iCScreen);
+}
+
+CTetris::~CTetris(){
+    delete currCBlk;
+    delete iCScreen;
+    delete oCScreen;
+    delete setOfCBlockObjects;
 }

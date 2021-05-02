@@ -12,6 +12,7 @@ public:
     
     TetrisState accept(char key);
     CTetris(int cy, int cx);
+    ~CTetris();
 };
 
 void init(int **setOfCBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES);

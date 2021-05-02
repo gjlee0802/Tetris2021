@@ -235,15 +235,18 @@ Tetris::Tetris(int _iScreenDy, int _iScreenDx){
             k++;
         }
     }
+    delete arrayScreen2D;
     
     iScreen = new Matrix(arrayScreen, arrayScreenDy, arrayScreenDx);
-    //cout << *iScreen << endl;
     oScreen = new Matrix(iScreen);
-    //cout << *oScreen << endl;
     justStarted = true;
 }
 
 Tetris::~Tetris(){
     delete iScreen;
     delete oScreen;
+    delete currBlk;
+    delete tempBlk;
+    delete arrayScreen;
+    delete setOfBlockObjects;
 }
