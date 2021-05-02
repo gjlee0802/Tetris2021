@@ -5,6 +5,7 @@ extern Matrix **(*setOfBlockObjects);
 
 extern int nBlockDegrees;
 extern int nBlockTypes;
+extern int iScreenDw;
 
 void init(int **setOfCBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES){
     int i = 0; int j = 0;
@@ -47,7 +48,7 @@ TetrisState CTetris::accept(char key){
 
     if ((key >= '0') && (key <= '6')){
         if (justStarted == false){
-            CTetris::deleteFullLines();
+            this->deleteFullLines();
         }
         iCScreen = new Matrix(oCScreen);
     }
@@ -69,7 +70,33 @@ TetrisState CTetris::accept(char key){
 }
 
 void CTetris::deleteFullLines(){
+    system("clear");
     std::cout << "call CTetris::deleteFullLines()" << std::endl;
+    bool is_zero = false;
+    int ** array = oScreen->get_array();
+
+    int dx = oScreen->get_dx() - iScreenDw*2;
+
+    for (int y=0; y < oScreen->get_dy() - iScreenDw; y++){
+        for (int x=0; x < dx; x++){
+            if (array[y][x] == 0){
+                is_zero = true;
+            }
+        }
+
+        if (!is_zero){ // if 0 not in array[y]
+            for (int x=0; x < dx; x++){
+                array[y][x] = 0;
+            }
+            top = 1;
+            left = 0;
+            currCBlk = oScreen->clip(0, 0, y, oScreen->get_dx());
+            tempBlk = iScreen->clip(0, 0, y, oScreen->get_dx());
+            tempBlk->paste(currCBlk, 0, 0);
+            oScreen = new Matrix(iScreen);
+            oScreen->paste(tempBlk, top, left);
+        }
+    }
 }
 
 CTetris::CTetris(int cy, int cx) : Tetris(cy, cx){

@@ -33,8 +33,17 @@ void tetinit(int **setOfBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES){
     {
         for (int j=0; j < nBlockDegrees; j++){
             int *arrptr = setOfBlockArrays[i*4 + j];
+            int arrsize = 0;
+            while(1){
+                if (arrptr[arrsize] == -1){
+                    break;
+                }
+                else{
+                    arrsize++;
+                }
+            }
             Matrix *obj;
-            obj = new Matrix(arrptr, sqrt(sizeof(arrptr)/sizeof(int) - 1), sqrt(sizeof(arrptr)/sizeof(int) - 1));
+            obj = new Matrix(arrptr, sqrt(arrsize), sqrt(arrsize));
             setOfBlockObjects[i][j] = obj;
         }
     }
@@ -49,12 +58,13 @@ void Tetris::deleteFullLines()
 
 TetrisState Tetris::tetaccept(char key)
 {
+    Matrix *binaryBlk;
     TetrisState state = Running;
     
     if ((key >= '0') && (key <='6')){
         if (justStarted == false){
             std::cout << "call deleteFullLines()" << std::endl;
-            //deleteFullLines();
+            deleteFullLines();
         }
         iScreen = new Matrix(oScreen);
         idxBlockType = key-'0';
@@ -62,18 +72,21 @@ TetrisState Tetris::tetaccept(char key)
 
         currBlk = setOfBlockObjects[idxBlockType][idxBlockDegree];
         top = 0;
-        left = iScreenDw + (iScreenDx/2) - (currBlk->get_dx()/2);
+        left = iScreenDw + (int)(iScreenDx/2) - (int)(currBlk->get_dx()/2);
 
-        
         tempBlk = iScreen->clip(top, left, top+currBlk->get_dy(), left+currBlk->get_dx());
+        binaryBlk = tempBlk->binary()->add(currBlk->binary());
         tempBlk = tempBlk->add(currBlk);
-
+        
         justStarted = false;
+
         std::cout << std::endl;
-        if (tempBlk->anyGreaterThan(1)){
+        //if (tempBlk->anyGreaterThan(1)){
+        if (binaryBlk->anyGreaterThan(1)){
             state = Finished;
         }
         oScreen = new Matrix(iScreen);
+        oScreen->paste(tempBlk, top, left);
         return state;
     }
     else if (key == 'q'){
@@ -93,9 +106,12 @@ TetrisState Tetris::tetaccept(char key)
         currBlk = setOfBlockObjects[idxBlockType][idxBlockDegree];
     }
     else if (key == ' '){
-        while (!tempBlk->anyGreaterThan(1)){
+        tempBlk = iScreen->clip(top, left, top+currBlk->get_dy(), left + currBlk->get_dx());
+        binaryBlk = tempBlk->binary()->add(currBlk->binary());
+        while (!binaryBlk->anyGreaterThan(1)){
             top++;
             tempBlk = iScreen->clip(top, left, top+currBlk->get_dy(), left + currBlk->get_dx());
+            binaryBlk = tempBlk->binary()->add(currBlk->binary());
             tempBlk = tempBlk->add(currBlk);
         }
     }
@@ -104,11 +120,36 @@ TetrisState Tetris::tetaccept(char key)
     }
 
     tempBlk = iScreen->clip(top, left, top+currBlk->get_dy(), left+currBlk->get_dx());
+    binaryBlk = tempBlk->binary()->add(currBlk->binary());
     tempBlk = tempBlk->add(currBlk);
 
-    if (tempBlk->anyGreaterThan(1)){
-        std::cout << "Wall Collision Detected!" << std::endl;
+    //if (tempBlk->anyGreaterThan(1)){
+    if (binaryBlk->anyGreaterThan(1)){
+        if (key == 'a'){
+            left++;
+        }
+        else if (key == 'd'){
+            left--;
+        }
+        else if (key == 's'){
+            top--;
+            state = NewBlock;
+        }
+        else if (key == 'w'){
+            idxBlockDegree = (idxBlockDegree - 1) % nBlockDegrees;
+            currBlk = setOfBlockObjects[idxBlockType][idxBlockDegree];
+        }
+        else if (key == ' '){
+            top--;
+            state = NewBlock;
+        }
+
+        tempBlk = iScreen->clip(top, left, top+currBlk->get_dy(), left+currBlk->get_dx());
+        binaryBlk = tempBlk->binary()->add(currBlk->binary());
+        tempBlk = tempBlk->add(currBlk);
     }
+    oScreen = new Matrix(iScreen);
+    oScreen->paste(tempBlk, top, left);
 
     return state;
 }
