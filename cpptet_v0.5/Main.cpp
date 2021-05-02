@@ -18,15 +18,6 @@
 
 using namespace std;
 
-Matrix **(*setOfCBlockObjects) = nullptr;
-Matrix **(*setOfBlockObjects) = nullptr;
-
-int nBlockDegrees;
-int nBlockTypes;
-
-int iScreenDw;
-
-
 /**************************************************************/
 /**************** Linux System Functions **********************/
 /**************************************************************/
@@ -163,7 +154,7 @@ void drawScreen(CTetris *board)
 {
   int dy = board->oCScreen->get_dy();
   int dx = board->oCScreen->get_dx();
-  int dw = iScreenDw;
+  int dw = CTetris::iScreenDw;
   int **array = board->oCScreen->get_array();
   system("clear");
 
@@ -212,13 +203,12 @@ int main(int argc, char *argv[]) {
   }
 
 #if 1
-  init(setOfCBlockArrays, MAX_BLK_TYPES, MAX_BLK_DEGREES);
+  CTetris::init(setOfCBlockArrays, MAX_BLK_TYPES, MAX_BLK_DEGREES);
   CTetris *board = new CTetris(dy, dx);
   TetrisState state;
 
   srand((unsigned int)time(NULL));
   key = (char)('0' + rand() % MAX_BLK_TYPES);
-  //key = '0';
 #endif
 
   registerAlarm();

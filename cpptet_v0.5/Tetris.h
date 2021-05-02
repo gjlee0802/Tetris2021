@@ -5,7 +5,7 @@
 enum TetrisState { Running, NewBlock, Finished };
 
 class Tetris {
-    public:
+public:
     bool justStarted;
 
     int iScreenDy;
@@ -26,7 +26,15 @@ class Tetris {
     
     int top;
     int left;
-    
+
+    static Matrix **(*setOfBlockObjects);
+
+    static int nBlockDegrees;
+    static int nBlockTypes;
+
+    static int iScreenDw;
+
+    static void init(int **setOfBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES);
     void deleteFullLines();
     TetrisState tetaccept(char key);
     int **createArrayScreen();
@@ -34,4 +42,3 @@ class Tetris {
     ~Tetris();
 };
 
-void tetinit(int **setOfBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES);

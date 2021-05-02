@@ -1,27 +1,22 @@
 #include "CTetris.h"
 
-extern Matrix **(*setOfCBlockObjects);
-extern Matrix **(*setOfBlockObjects);
+Matrix **(*CTetris::setOfCBlockObjects);
 
-extern int nBlockDegrees;
-extern int nBlockTypes;
-extern int iScreenDw;
-
-void init(int **setOfCBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES){
+void CTetris::init(int **setOfCBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES){
     int i = 0; int j = 0;
     
-    tetinit(setOfCBlockArrays, MAX_BLK_TYPES, MAX_BLK_DEGREES);
+    Tetris::init(setOfCBlockArrays, MAX_BLK_TYPES, MAX_BLK_DEGREES);
 
-    setOfCBlockObjects = new Matrix**[nBlockTypes];
-    for (int y = 0; y < nBlockTypes; y++)
-        setOfCBlockObjects[y] = new Matrix*[nBlockDegrees];
-    for (int y = 0; y < nBlockTypes; y++)
-        for (int x = 0; x < nBlockDegrees; x++)
-            setOfCBlockObjects[y][x] = nullptr;
+    CTetris::setOfCBlockObjects = new Matrix**[Tetris::nBlockTypes];
+    for (int y = 0; y < Tetris::nBlockTypes; y++)
+        CTetris::setOfCBlockObjects[y] = new Matrix*[Tetris::nBlockDegrees];
+    for (int y = 0; y < Tetris::nBlockTypes; y++)
+        for (int x = 0; x < Tetris::nBlockDegrees; x++)
+            CTetris::setOfCBlockObjects[y][x] = nullptr;
 
-    for (i=0; i < nBlockTypes; i++)
+    for (i=0; i < Tetris::nBlockTypes; i++)
     {
-        for (j=0; j < nBlockDegrees; j++){
+        for (j=0; j < Tetris::nBlockDegrees; j++){
             int *arrptr = setOfCBlockArrays[i*4 + j];
             int arrsize = 0;
             while(1){
@@ -36,7 +31,7 @@ void init(int **setOfCBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES){
             obj = new Matrix(arrptr, sqrt(arrsize), sqrt(arrsize));
             obj->mulc(i+1);
             cout << *obj <<endl;
-            setOfCBlockObjects[i][j] = obj;
+            CTetris::setOfCBlockObjects[i][j] = obj;
         }
     }
 

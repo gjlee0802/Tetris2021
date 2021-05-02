@@ -1,37 +1,34 @@
 #include "Tetris.h"
 
-extern Matrix **(*setOfCBlockObjects);
-extern Matrix **(*setOfBlockObjects);
+int Tetris::nBlockTypes;
+int Tetris::nBlockDegrees;
+int Tetris::iScreenDw;
+Matrix **(*Tetris::setOfBlockObjects);
 
-extern int nBlockDegrees;
-extern int nBlockTypes;
-
-extern int iScreenDw;
-
-void tetinit(int **setOfBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES){
+void Tetris::init(int **setOfBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES){
     int arrayBlk_maxSize = 0;
 
-    nBlockTypes = MAX_BLK_TYPES;
-    nBlockDegrees = MAX_BLK_DEGREES;
+    Tetris::nBlockTypes = MAX_BLK_TYPES;
+    Tetris::nBlockDegrees = MAX_BLK_DEGREES;
 
-    setOfBlockObjects = new Matrix**[nBlockTypes];
-    for (int y = 0; y < nBlockTypes; y++)
-        setOfBlockObjects[y] = new Matrix*[nBlockDegrees];
-    for (int y = 0; y < nBlockTypes; y++)
-        for (int x = 0; x < nBlockDegrees; x++)
-            setOfBlockObjects[y][x] = nullptr;
+    Tetris::setOfBlockObjects = new Matrix**[Tetris::nBlockTypes];
+    for (int y = 0; y < Tetris::nBlockTypes; y++)
+        Tetris::setOfBlockObjects[y] = new Matrix*[Tetris::nBlockDegrees];
+    for (int y = 0; y < Tetris::nBlockTypes; y++)
+        for (int x = 0; x < Tetris::nBlockDegrees; x++)
+            Tetris::setOfBlockObjects[y][x] = nullptr;
 
     // TODO: arrayBlk_maxSize calculation
-    for (int i=0; i < nBlockTypes; i++) {
+    for (int i=0; i < Tetris::nBlockTypes; i++) {
         if (arrayBlk_maxSize <= sizeof(setOfBlockArrays[i][0])){
             arrayBlk_maxSize = sizeof(setOfBlockArrays[i][0]);
         }
     }
-    iScreenDw = arrayBlk_maxSize;
+    Tetris::iScreenDw = arrayBlk_maxSize;
 
-    for (int i=0; i < nBlockTypes; i++)
+    for (int i=0; i < Tetris::nBlockTypes; i++)
     {
-        for (int j=0; j < nBlockDegrees; j++){
+        for (int j=0; j < Tetris::nBlockDegrees; j++){
             int *arrptr = setOfBlockArrays[i*4 + j];
             int arrsize = 0;
             while(1){
@@ -44,7 +41,7 @@ void tetinit(int **setOfBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES){
             }
             Matrix *obj;
             obj = new Matrix(arrptr, sqrt(arrsize), sqrt(arrsize));
-            setOfBlockObjects[i][j] = obj;
+            Tetris::setOfBlockObjects[i][j] = obj;
         }
     }
     return;
