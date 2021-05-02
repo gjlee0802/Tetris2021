@@ -225,8 +225,8 @@ int main(int argc, char *argv[]) {
   TetrisState state;
 
   srand((unsigned int)time(NULL));
-  //key = (char)('0' + rand() % MAX_BLK_TYPES);
-  key = '0';
+  key = (char)('0' + rand() % MAX_BLK_TYPES);
+  //key = '0';
 #endif
 
   registerAlarm();
@@ -242,7 +242,7 @@ int main(int argc, char *argv[]) {
 	      break;
       }
     }
-    //drawScreen(board);
+    drawScreen(board);
     cout << endl;
 #endif
     key = getch();

@@ -22,11 +22,19 @@ void init(int **setOfCBlockArrays, int MAX_BLK_TYPES, int MAX_BLK_DEGREES){
     {
         for (j=0; j < nBlockDegrees; j++){
             int *arrptr = setOfCBlockArrays[i*4 + j];
+            int arrsize = 0;
+            while(1){
+                if (arrptr[arrsize] == -1){
+                    break;
+                }
+                else{
+                    arrsize++;
+                }
+            }
             Matrix *obj;
-            std::cout << sqrt(sizeof(arrptr)/sizeof(int) - 1) << std::endl;
-            obj = new Matrix(arrptr, sqrt(sizeof(arrptr)/sizeof(int) - 1), sqrt(sizeof(arrptr)/sizeof(int) - 1));
+            obj = new Matrix(arrptr, sqrt(arrsize), sqrt(arrsize));
             obj->mulc(i+1);
-            cout <<obj<<endl;
+            cout << *obj <<endl;
             setOfCBlockObjects[i][j] = obj;
         }
     }
