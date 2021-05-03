@@ -142,12 +142,13 @@ int *setOfCBlockArrays[] = {
 struct TextColor{
   std::string color_normal = "\033[37m";
   std::string color_black = "\033[37m";
-  std::string color_green = "\033[32m";
-  std::string color_cyan = "\033[36m";
-  std::string color_blue = "\033[34m";
-  std::string color_yellow = "\033[33m";
   std::string color_red = "\033[31m";
-  std::string color_magenta = "\033[95m";
+  std::string color_green = "\033[32m";
+  std::string color_yellow = "\033[33m";
+  std::string color_blue = "\033[34m";
+  std::string color_purple = "\033[35m";
+  std::string color_cyan = "\033[36m";
+  std::string color_pink = "\033[95m";
 } color;
 
 void drawScreen(CTetris *board)
@@ -160,26 +161,36 @@ void drawScreen(CTetris *board)
 
   for (int y = 0; y < dy - dw + 1; y++) {
     for (int x = dw - 1; x < dx - dw + 1; x++) {
-      if(array[y][x] == 0)
-	cout << color.color_black << "□ " << color.color_normal;
-      else if (array[y][x] == 1)
-	cout << color.color_black << "■ " << color.color_normal;
-      else if (array[y][x] == 2)
-	cout << color.color_green << "■ " << color.color_normal;
-      else if (array[y][x] == 3)
-	cout << color.color_cyan << "■ " << color.color_normal;
-      else if (array[y][x] == 4)
-	cout << color.color_blue << "■ " << color.color_normal;
-      else if (array[y][x] == 5)
-	cout << color.color_yellow << "■ " << color.color_normal;
-      else if (array[y][x] == 6)
-	cout << color.color_red << "■ " << color.color_normal;
-      else if (array[y][x] == 7)
-	cout << color.color_magenta << "■ " << color.color_normal;
-      else // array[y][x] == 1 // wall
-	cout << color.color_black << "■ " << color.color_normal;
+      if((y!=dy-dw) && (x!=dw-1) && (x!=dx-dw)){
+      	if(array[y][x] == 0)
+		cout << color.color_black << "□ " << color.color_normal;
+      	else if (array[y][x] == 1)
+		cout << color.color_blue << "■ " << color.color_normal;
+      	else if (array[y][x] == 2)
+		cout << color.color_cyan << "■ " << color.color_normal;
+      	else if (array[y][x] == 3)
+		cout << color.color_green << "■ " << color.color_normal;
+      	else if (array[y][x] == 4)
+		cout << color.color_yellow << "■ " << color.color_normal;
+      	else if (array[y][x] == 5)
+		cout << color.color_pink << "■ " << color.color_normal;
+      	else if (array[y][x] == 6)
+		cout << color.color_purple << "■ " << color.color_normal;
+      	else if (array[y][x] == 7)
+		cout << color.color_red << "■ " << color.color_normal;
+      	else
+		cout << color.color_black << "■ " << color.color_normal;
+      }
+      else{
+	if(array[y][x] == 0)
+		cout << color.color_black << "□ " << color.color_normal;
+    	else if(array[y][x] == 1)
+		cout << color.color_black << "■ " << color.color_normal;
+      	else
+		cout << color.color_black << "■ " << color.color_normal;
+
+      }
     }
-  
     cout << endl;
   }
 }
