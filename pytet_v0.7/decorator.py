@@ -59,7 +59,7 @@ class ColorDecorator(Game):
                 for y in range(nScanned - 1, -1, -1):
                     cy = self.game.top + y + nDeleted
                     line = self.oCScreen.binary().clip(cy, 0, cy+1, self.oCScreen.get_dx())
-                    if line.sum() == self.game.oScreen.get_dx():
+                    if line.sum() == self.oCScreen.get_dx():
                         temp = self.oCScreen.clip(0, 0, cy, self.oCScreen.get_dx())
                         self.oCScreen.paste(temp, 1, 0)
                         self.oCScreen.paste(zero, 0, self.game.iScreenDw)
