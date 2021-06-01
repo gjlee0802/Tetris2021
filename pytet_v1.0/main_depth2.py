@@ -249,7 +249,6 @@ class Model(threading.Thread, Observer, Publisher):
                 idxBlockType = randint(0, nBlocks-1)
                 key = str(idxBlockType)
                 state = board.accept(key)
-                printWindow(self.window, board.getScreen())
 
                 while not isGameDone:
                         key = self.read()
@@ -261,17 +260,12 @@ class Model(threading.Thread, Observer, Publisher):
                         key = self.keypad[key]
                         if key == 'q':
                                 state = TetrisState.Finished
-                        else:
-                                state = processKey(self.window, board, key)
-
-                        if state == TetrisState.Finished:
-                                isGameDone = True
-                                printMsg('%s IS DEAD!!!' % self.name)
-                                time.sleep(2)
-                                break
+                        self.notifyObservers(key)
 
                 printMsg('%s terminated... Press any key to continue' % self.name)
                 time.sleep(1)
+                self.notifyObservers('')
+                
                 return
 
         def addObserver(self, observer):
@@ -306,10 +300,6 @@ class View(threading.Thread, Observer):
 		key = self.queue.pop(0)
 		self.cv.release()
 		return key
-	
-	def addKeypad(self, keypad):
-		self.keypad = keypad
-		return
 
 	def addWindow(self, window):
 		self.window = window
@@ -332,10 +322,10 @@ class View(threading.Thread, Observer):
 			key = self.read()
 			if key == '':
 				break
-			if key not in self.keypad:
-				continue
+			#if key not in self.keypad:
+			#	continue
 
-			key = self.keypad[key]
+			#key = self.keypad[key]
 			if key == 'q':
 				state = TetrisState.Finished
 			else:
