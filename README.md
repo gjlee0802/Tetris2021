@@ -1,5 +1,3 @@
 # sweng2021
- Software engineering 과제물
- - v0.1: 과제 기한 3/17
- - v0.4: 과제 기한 3/31
- - v0.7: 과제 기한 5/21
+ Software engineering 수업 과제물   
+ 테트리스 게임 제작   
